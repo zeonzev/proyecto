@@ -3,14 +3,15 @@ package proyecto.proyecto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SaludoController {
 
     @GetMapping("/saludo")
-    public String saludo(Model model) {
+    public String saludo(@RequestParam(defaultValue = "Juan") String nombre, Model model) {
 
-        model.addAttribute("nombre", "Juan");
+        model.addAttribute("nombre", nombre);
 
         return "saludo";
     }

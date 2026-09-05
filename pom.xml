@@ -11,8 +11,8 @@
 	<groupId>proyecto</groupId>
 	<artifactId>proyecto</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>proyecto</name>
+	<description>Proyecto de ejemplo con Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
