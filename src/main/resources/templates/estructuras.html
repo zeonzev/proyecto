@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructuras de datos</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+        .contenedor {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin: 0 0 0.25rem;
+        }
+        .subtitulo {
+            text-align: center;
+            color: #94a3b8;
+            margin: 0 0 2rem;
+        }
+        .panel {
+            background: #ffffff;
+            color: #1e293b;
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+        .panel h2 {
+            margin: 0 0 0.25rem;
+            font-size: 1.35rem;
+        }
+        .panel .nota {
+            margin: 0 0 1.25rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        /* Arreglo estatico: celdas con indice */
+        .arreglo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .celda {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .celda .caja {
+            min-width: 78px;
+            padding: 0.7rem 0.5rem;
+            text-align: center;
+            background: #eef2ff;
+            border: 2px solid #6366f1;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .celda .indice {
+            margin-top: 0.35rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        /* Lista enlazada: nodos con flechas */
+        .lista {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .nodo {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 0.55rem 0.7rem;
+            font-weight: 600;
+        }
+        .nodo form {
+            margin: 0;
+        }
+        .nodo button {
+            border: none;
+            background: transparent;
+            color: #ef4444;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+        .flecha {
+            color: #10b981;
+            font-weight: 700;
+        }
+        .null {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .vacia {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        form.agregar {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+        form.agregar input {
+            flex: 1;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        form.agregar button {
+            padding: 0.6rem 1.1rem;
+            border: none;
+            border-radius: 8px;
+            background: #10b981;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .tamano {
+            margin-top: 0.9rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .volver {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #94a3b8;
+            text-decoration: none;
+        }
+        .volver:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>Estructuras de datos 🧱</h1>
+        <p class="subtitulo">Ejemplo de una estructura estatica y una dinamica</p>
+
+        <!-- Estructura estatica -->
+        <section class="panel">
+            <h2>1. Estructura estatica — Arreglo</h2>
+            <p class="nota">Tamano fijo definido al crearla. Se accede por indice.</p>
+            <div class="arreglo">
+                <div class="celda" th:each="dia, it : ${arreglo}">
+                    <div class="caja" th:text="${dia}">valor</div>
+                    <div class="indice" th:text="'[' + ${it.index} + ']'">[0]</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estructura dinamica -->
+        <section class="panel">
+            <h2>2. Estructura dinamica — Lista enlazada</h2>
+            <p class="nota">Crece y decrece en tiempo de ejecucion. Cada nodo apunta al siguiente.</p>
+
+            <div class="lista" th:if="${!lista.isEmpty()}">
+                <th:block th:each="elem : ${lista}">
+                    <div class="nodo">
+                        <span th:text="${elem}">valor</span>
+                        <form th:action="@{/estructuras/eliminar}" method="post">
+                            <input type="hidden" name="valor" th:value="${elem}">
+                            <button type="submit" title="Eliminar">✕</button>
+                        </form>
+                    </div>
+                    <span class="flecha">→</span>
+                </th:block>
+                <span class="null">null</span>
+            </div>
+            <p class="vacia" th:if="${lista.isEmpty()}">La lista esta vacia.</p>
+
+            <form class="agregar" th:action="@{/estructuras/agregar}" method="post">
+                <input type="text" name="valor" placeholder="Nuevo elemento" required>
+                <button type="submit">Agregar</button>
+            </form>
+            <p class="tamano">Tamano actual: <strong th:text="${tamano}">0</strong> nodo(s)</p>
+        </section>
+
+        <a class="volver" href="/">← Volver al inicio</a>
+    </div>
+
+</body>
+</html>
